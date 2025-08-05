@@ -115,11 +115,13 @@
         .floor-plan-container {
             position: relative;
             width: 100%;
-            height: 80vh;
+            height: 70vh;
+            min-height: 500px;
             overflow: hidden;
             cursor: grab;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: white;
         }
 
         .floor-plan-container:active {
@@ -127,9 +129,7 @@
         }
 
         .floor-plan {
-            max-width: none;
-            max-height: none;
-            width: auto;
+            width: 100%;
             height: 100%;
             object-fit: contain;
             transition: transform 0.3s ease;
@@ -268,11 +268,12 @@
 
         .zoom-controls {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            right: 30px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            z-index: 1000;
         }
 
         .zoom-btn {
@@ -299,8 +300,6 @@
     </style>
 </head>
 <body>
-    <!-- Responsive dimensions for Google Sites embed -->
-    <div style="width: 100%; max-width: 1200px; height: 90vh; min-height: 600px; margin: 0 auto; overflow: hidden;">
     <div class="container">
         <div class="header">
             <h1>Building HVAC Control Zones</h1>
