@@ -25,6 +25,9 @@
             border-radius: 15px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .header {
@@ -166,6 +169,10 @@
             padding: 25px;
             background: white;
             border-top: 1px solid #dee2e6;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
         }
 
         .legend-item {
@@ -240,6 +247,8 @@
 
             .legend {
                 grid-template-columns: 1fr;
+                position: static;
+                box-shadow: none;
             }
 
             .floor-info {
@@ -255,6 +264,10 @@
                 background: #e3f2fd;
                 color: #1565c0;
                 font-size: 14px;
+            }
+
+            .container {
+                min-height: auto;
             }
         }
 
