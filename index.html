@@ -382,13 +382,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Immanuel Building HVAC Control Zones</h1>
+            <h1>Immanuel Building HVAC Control Areas</h1>
             <p>Interactive floor plan showing Trane Tracer SC system areas and controls</p>
         </div>
 
         <div class="controls">
             <div class="search-container">
-                <input type="text" class="search-input" placeholder="Search rooms or zones..." id="searchInput">
+                <input type="text" class="search-input" placeholder="Search rooms or areas..." id="searchInput">
             </div>
             
             <button class="floor-btn" data-floor="lower">Lower Level</button>
@@ -396,11 +396,11 @@
             <button class="floor-btn" data-floor="second">Second Floor</button>
             <button class="floor-btn" data-floor="third">Third Floor</button>
             
-            <button class="overlay-toggle active" id="overlayToggle">Hide HVAC Zones</button>
+            <button class="overlay-toggle active" id="overlayToggle">Hide HVAC Areas</button>
         </div>
 
         <div class="mobile-responsive">
-            💡 Tip: Tap floor buttons to switch levels, use overlay toggle to show/hide HVAC zones
+            💡 Tip: Tap floor buttons to switch levels, use overlay toggle to show/hide HVAC areas
         </div>
 
         <div class="floor-display" id="floorDisplay">
@@ -434,7 +434,7 @@
                 
                 <div class="help-section">
                     <h3>🔎 Search</h3>
-                    <p>Type room names or zones in the search box to quickly jump to relevant floors with overlay enabled.</p>
+                    <p>Type room names or areas in the search box to quickly jump to relevant floors with overlay enabled.</p>
                 </div>
                 
                 <div class="help-section">
@@ -461,7 +461,7 @@
                 
                 <div class="help-section">
                     <h3>💡 Tips</h3>
-                    <p><strong>Yellow zones</strong> represent office scheduling areas (consistent across floors).<br>
+                    <p><strong>Yellow areas</strong> represent office scheduling areas (consistent across floors).<br>
                     <strong>Other colors</strong> vary by floor - refer to the overlay text for specific zone details.<br>
                     <strong>Mobile users:</strong> Tap and drag to pan when zoomed in.</p>
                 </div>
@@ -526,7 +526,7 @@
             });
             
             // Set initial overlay toggle state
-            overlayToggle.textContent = showOverlay ? 'Hide HVAC Zones' : 'Show HVAC Zones';
+            overlayToggle.textContent = showOverlay ? 'Hide HVAC Areas' : 'Show HVAC Areas';
             overlayToggle.classList.toggle('active', showOverlay);
             
             // Show initial floor
@@ -620,7 +620,7 @@
         // Toggle HVAC overlay
         function toggleOverlay() {
             showOverlay = !showOverlay;
-            overlayToggle.textContent = showOverlay ? 'Hide HVAC Zones' : 'Show HVAC Zones';
+            overlayToggle.textContent = showOverlay ? 'Hide HVAC Areas' : 'Show HVAC Areas';
             overlayToggle.classList.toggle('active', showOverlay);
             showFloor(currentFloor);
         }
