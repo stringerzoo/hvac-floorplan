@@ -3,6 +3,7 @@
 Interactive web-based floor plan reference tool for Immanuel Building's HVAC control areas, designed to complement the Trane Tracer SC system.
 
 ## 🔗 Live Site
+**redirect from https://immanuelky.org/hvac-floorplan** to
 **[https://stringerzoo.github.io/hvac-floorplan/](https://stringerzoo.github.io/hvac-floorplan/)**
 
 ## ✨ Features
