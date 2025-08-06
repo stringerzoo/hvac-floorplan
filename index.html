@@ -257,7 +257,7 @@
             width: 40px;
             height: 40px;
             border: none;
-            background: rgba(155, 127, 75, 0.9);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
             cursor: pointer;
             display: flex;
@@ -271,7 +271,7 @@
         }
 
         .help-btn:hover {
-            background: rgba(155, 127, 75, 1);
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
             transform: scale(1.1);
         }
 
@@ -503,6 +503,11 @@
         let currentFloor = 'first';
         let showOverlay = true;
         let zoomLevel = 1;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let lastX = 0;
+        let lastY = 0;
 
         // DOM elements
         const floorDisplay = document.getElementById('floorDisplay');
@@ -591,6 +596,26 @@
                     <button class="help-btn" onclick="showHelp()">?</button>
                 </div>
             `;
+
+            // Reset pan and zoom when switching floors
+            zoomLevel = 1;
+            panX = 0;
+            panY = 0;
+
+            // Add pan functionality after image loads
+            const image = document.getElementById('floorPlanImage');
+            const container = document.getElementById('floorContainer');
+            
+            if (image && container) {
+                image.onload = function() {
+                    setupPanZoom();
+                    updateImageTransform();
+                };
+                if (image.complete) {
+                    setupPanZoom();
+                    updateImageTransform();
+                }
+            }
         }
 
         // Toggle HVAC overlay
@@ -644,18 +669,148 @@
 
         // Zoom functionality
         function adjustZoom(delta) {
+            const oldZoom = zoomLevel;
             zoomLevel = Math.max(1, Math.min(4, zoomLevel + delta));
-            const floorPlan = document.querySelector('.floor-plan');
-            if (floorPlan) {
-                floorPlan.style.transform = `scale(${zoomLevel})`;
+            
+            // Reset pan when at fit-to-screen level
+            if (zoomLevel <= 1) {
+                panX = 0;
+                panY = 0;
+            } else {
+                // Adjust pan proportionally when zooming
+                const zoomRatio = zoomLevel / oldZoom;
+                panX *= zoomRatio;
+                panY *= zoomRatio;
+                constrainPan();
             }
+            
+            updateImageTransform();
         }
 
         function resetZoom() {
             zoomLevel = 1;
-            const floorPlan = document.querySelector('.floor-plan');
-            if (floorPlan) {
-                floorPlan.style.transform = `scale(${zoomLevel})`;
+            panX = 0;
+            panY = 0;
+            updateImageTransform();
+        }
+
+        // Setup pan and zoom functionality
+        function setupPanZoom() {
+            const container = document.getElementById('floorContainer');
+            const image = document.getElementById('floorPlanImage');
+            
+            if (!container || !image) return;
+
+            // Mouse events for desktop
+            container.addEventListener('mousedown', startPan);
+            container.addEventListener('mousemove', doPan);
+            container.addEventListener('mouseup', endPan);
+            container.addEventListener('mouseleave', endPan);
+
+            // Touch events for mobile/trackpad
+            container.addEventListener('touchstart', handleTouchStart, { passive: false });
+            container.addEventListener('touchmove', handleTouchMove, { passive: false });
+            container.addEventListener('touchend', handleTouchEnd);
+
+            // Wheel event for zoom
+            container.addEventListener('wheel', handleWheel, { passive: false });
+        }
+
+        // Mouse pan functions
+        function startPan(e) {
+            if (zoomLevel <= 1) return;
+            isDragging = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            e.preventDefault();
+        }
+
+        function doPan(e) {
+            if (!isDragging || zoomLevel <= 1) return;
+            
+            const deltaX = e.clientX - lastX;
+            const deltaY = e.clientY - lastY;
+            
+            panX += deltaX;
+            panY += deltaY;
+            
+            constrainPan();
+            updateImageTransform();
+            
+            lastX = e.clientX;
+            lastY = e.clientY;
+            e.preventDefault();
+        }
+
+        function endPan() {
+            isDragging = false;
+        }
+
+        // Touch events for trackpad/mobile
+        let lastTouchX = 0;
+        let lastTouchY = 0;
+
+        function handleTouchStart(e) {
+            if (e.touches.length === 1 && zoomLevel > 1) {
+                isDragging = true;
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+                e.preventDefault();
+            }
+        }
+
+        function handleTouchMove(e) {
+            if (e.touches.length === 1 && isDragging && zoomLevel > 1) {
+                const deltaX = e.touches[0].clientX - lastTouchX;
+                const deltaY = e.touches[0].clientY - lastTouchY;
+                
+                panX += deltaX;
+                panY += deltaY;
+                
+                constrainPan();
+                updateImageTransform();
+                
+                lastTouchX = e.touches[0].clientX;
+                lastTouchY = e.touches[0].clientY;
+                e.preventDefault();
+            }
+        }
+
+        function handleTouchEnd() {
+            isDragging = false;
+        }
+
+        // Wheel zoom for trackpad/mouse wheel
+        function handleWheel(e) {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? -0.1 : 0.1;
+            adjustZoom(delta);
+        }
+
+        // Constrain panning to keep image visible
+        function constrainPan() {
+            const container = document.getElementById('floorContainer');
+            if (!container) return;
+
+            const containerRect = container.getBoundingClientRect();
+            const maxPanX = (containerRect.width * (zoomLevel - 1)) / 2;
+            const maxPanY = (containerRect.height * (zoomLevel - 1)) / 2;
+
+            panX = Math.max(-maxPanX, Math.min(maxPanX, panX));
+            panY = Math.max(-maxPanY, Math.min(maxPanY, panY));
+        }
+
+        // Update image transform
+        function updateImageTransform() {
+            const image = document.getElementById('floorPlanImage');
+            if (image) {
+                if (zoomLevel === 1) {
+                    // At zoom level 1, let CSS handle the fit-to-container
+                    image.style.transform = 'none';
+                } else {
+                    // When zoomed, apply manual transform
+                    image.style.transform = `scale(${zoomLevel}) translate(${panX / zoomLevel}px, ${panY / zoomLevel}px)`;
+                }
             }
         }
 
