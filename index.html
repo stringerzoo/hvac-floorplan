@@ -458,10 +458,10 @@
         // Keyboard shortcuts
         function handleKeyPress(e) {
             switch(e.key) {
-                case '1': switchFloor('lower'); break;
-                case '2': switchFloor('first'); break;
-                case '3': switchFloor('second'); break;
-                case '4': switchFloor('third'); break;
+                case 'l': switchFloor('lower'); break;
+                case '1': switchFloor('first'); break;
+                case '2': switchFloor('second'); break;
+                case '3': switchFloor('third'); break;
                 case ' ': e.preventDefault(); toggleOverlay(); break;
                 case '=': e.preventDefault(); adjustZoom(0.2); break;
                 case '-': e.preventDefault(); adjustZoom(-0.2); break;
