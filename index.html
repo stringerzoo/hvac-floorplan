@@ -413,8 +413,8 @@
         };
 
         // Current state
-        let currentFloor = 'lower';
-        let showOverlay = false;
+        let currentFloor = 'first';
+        let showOverlay = true;
         let zoomLevel = 1;
 
         // DOM elements
@@ -477,10 +477,10 @@
 
             floorDisplay.innerHTML = `
                 <img src="${imageUrl}" alt="${data.title}" class="floor-plan" style="transform: scale(${zoomLevel});">
-                <div class="floor-info" id="floorInfo">
+                <!-- <div class="floor-info" id="floorInfo">
                     <h3>${data.title}</h3>
                     <p>${data.description}</p>
-                </div>
+                </div> -->
                 <div class="zoom-controls">
                     <button class="zoom-btn" onclick="adjustZoom(0.2)">+</button>
                     <button class="zoom-btn" onclick="adjustZoom(-0.2)">−</button>
