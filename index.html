@@ -14,7 +14,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #9B7F4B; <!-- linear-gradient(135deg, #667eea 0%, #764ba2 100%); -->
+            background: #9B7F4B;
             min-height: 100vh;
             padding: 20px;
             margin: 0;
@@ -255,12 +255,6 @@
                 max-width: 300px;
             }
 
-            .legend {
-                position: static;
-                box-shadow: none;
-                max-height: none;
-            }
-
             .zoom-controls {
                 position: absolute;
                 bottom: 30px;
@@ -268,14 +262,8 @@
             }
 
             .floor-display {
-                height: 50vh;
-                min-height: 300px;
-            }
-
-            .floor-info {
-                position: static;
-                margin: 15px;
-                text-align: center;
+                height: 70vh;
+                min-height: 400px;
             }
 
             .mobile-responsive {
@@ -348,7 +336,7 @@
             <button class="floor-btn" data-floor="second">Second Floor</button>
             <button class="floor-btn" data-floor="third">Third Floor</button>
             
-            <button class="overlay-toggle" id="overlayToggle.active">Hide HVAC Zones</button>
+            <button class="overlay-toggle active" id="overlayToggle">Hide HVAC Zones</button>
         </div>
 
         <div class="mobile-responsive">
@@ -357,31 +345,12 @@
 
         <div class="floor-display" id="floorDisplay">
             <div class="loading">Loading floor plan...</div>
-            <!-- comment out floor info labels 
-            <div class="floor-info" id="floorInfo" style="display: none;">
-                <h3 id="floorTitle">Lower Level</h3>
-                <p id="floorDescription">Base floor with mechanical systems</p>
-            </div> -->
             <div class="zoom-controls">
                 <button class="zoom-btn" id="zoomIn">+</button>
                 <button class="zoom-btn" id="zoomOut">−</button>
                 <button class="zoom-btn" id="zoomReset">⌂</button>
             </div>
         </div>
-
-    <!-- Remove Legend
-    *    <div class="legend">
-    *        <div class="legend-item">
-    *            <div class="legend-color" style="background: #ffc107;"></div>
-    *            <div class="legend-text">Office Scheduling Zone (consistent across all floors)</div>
-    *        </div>
-    *        <div class="legend-item">
-    *            <div class="legend-color" style="background: linear-gradient(90deg, #007bff, #28a745, #fd7e14, #6f42c1, #dc3545, #20c997);"></div>
-    *            <div class="legend-text">Other scheduling zones vary by floor - refer to overlay details</div>
-    *        </div>
-    *    </div>
-    -->
-    
     </div>
 
     <script>
@@ -414,21 +383,29 @@
         };
 
         // Current state
-        let currentFloor = 'first';
-        let showOverlay = true;
+        let currentFloor = 'first'; // Changed from 'lower' to 'first'
+        let showOverlay = true; // Changed from false to true
         let zoomLevel = 1;
 
         // DOM elements
         const floorDisplay = document.getElementById('floorDisplay');
-        const floorInfo = document.getElementById('floorInfo');
-        const floorTitle = document.getElementById('floorTitle');
-        const floorDescription = document.getElementById('floorDescription');
         const overlayToggle = document.getElementById('overlayToggle');
         const searchInput = document.getElementById('searchInput');
 
         // Initialize the application
         function init() {
             setupEventListeners();
+            
+            // Set initial button states
+            document.querySelectorAll('.floor-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.floor === currentFloor);
+            });
+            
+            // Set initial overlay toggle state
+            overlayToggle.textContent = showOverlay ? 'Hide HVAC Zones' : 'Show HVAC Zones';
+            overlayToggle.classList.toggle('active', showOverlay);
+            
+            // Show initial floor
             showFloor(currentFloor);
         }
 
@@ -478,10 +455,10 @@
 
             floorDisplay.innerHTML = `
                 <img src="${imageUrl}" alt="${data.title}" class="floor-plan" style="transform: scale(${zoomLevel});">
-                <!-- <div class="floor-info" id="floorInfo">
+                <div class="floor-info" id="floorInfo">
                     <h3>${data.title}</h3>
                     <p>${data.description}</p>
-                </div> -->
+                </div>
                 <div class="zoom-controls">
                     <button class="zoom-btn" onclick="adjustZoom(0.2)">+</button>
                     <button class="zoom-btn" onclick="adjustZoom(-0.2)">−</button>
