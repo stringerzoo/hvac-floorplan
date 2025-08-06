@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HVAC Zones</title>
+    <title>Interactive HVAC Building Floorplan</title>
     <link rel="icon" type="image/x-icon" href="images/2021-5-20_logomark_gold.png">
     <style>
         * {
@@ -120,14 +120,16 @@
 
         .floor-plan-container {
             position: relative;
-            width: 100%;
-            height: 70vh;
-            min-height: 500px;
+            width: 95%;
+            height: 90%;
+            max-width: 1200px;
+            max-height: 800px;
             overflow: hidden;
             cursor: grab;
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             background: white;
+            margin: 0 auto;
         }
 
         .floor-plan-container:active {
@@ -142,73 +144,8 @@
             transition: transform 0.3s ease;
             user-select: none;
             -webkit-user-drag: none;
-        }
-
-        .floor-info {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255,255,255,0.95);
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .floor-info h3 {
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-
-        .floor-info p {
-            color: #6c757d;
-            font-size: 14px;
-        }
-
-        .legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            padding: 25px;
-            background: white;
-            border-top: 1px solid #dee2e6;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
-            max-height: 100px;
-            overflow-y: auto;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .legend-item:hover {
-            background: #e9ecef;
-            transform: translateY(-1px);
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            border: 1px solid #dee2e6;
-        }
-
-        .legend-text {
-            font-size: 14px;
-            font-weight: 500;
-            color: #495057;
+            display: block;
+            margin: 0 auto;
         }
 
         .search-container {
@@ -286,7 +223,7 @@
 
         .zoom-controls {
             position: fixed;
-            bottom: 120px;
+            bottom: 30px;
             right: 30px;
             display: flex;
             flex-direction: column;
@@ -323,8 +260,6 @@
             <h1>Immanuel Building HVAC Control Zones</h1>
             <p>Interactive floor plan showing Trane Tracer SC system areas and controls</p>
         </div>
-    </div>
-    <!-- End responsive dimensions wrapper -->
 
         <div class="controls">
             <div class="search-container">
@@ -383,8 +318,8 @@
         };
 
         // Current state
-        let currentFloor = 'first'; // Changed from 'lower' to 'first'
-        let showOverlay = true; // Changed from false to true
+        let currentFloor = 'first';
+        let showOverlay = true;
         let zoomLevel = 1;
 
         // DOM elements
@@ -454,10 +389,8 @@
             const imageUrl = showOverlay ? data.overlayImage : data.baseImage;
 
             floorDisplay.innerHTML = `
-                <img src="${imageUrl}" alt="${data.title}" class="floor-plan" style="transform: scale(${zoomLevel});">
-                <div class="floor-info" id="floorInfo">
-                    <h3>${data.title}</h3>
-                    <p>${data.description}</p>
+                <div class="floor-plan-container" id="floorContainer">
+                    <img src="${imageUrl}" alt="${data.title}" class="floor-plan" id="floorPlanImage">
                 </div>
                 <div class="zoom-controls">
                     <button class="zoom-btn" onclick="adjustZoom(0.2)">+</button>
@@ -507,7 +440,7 @@
 
         // Zoom functionality
         function adjustZoom(delta) {
-            zoomLevel = Math.max(0.5, Math.min(3, zoomLevel + delta));
+            zoomLevel = Math.max(1, Math.min(4, zoomLevel + delta));
             const floorPlan = document.querySelector('.floor-plan');
             if (floorPlan) {
                 floorPlan.style.transform = `scale(${zoomLevel})`;
