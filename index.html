@@ -252,6 +252,132 @@
             background: white;
             transform: scale(1.1);
         }
+
+        .help-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(155, 127, 75, 0.9);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .help-btn:hover {
+            background: rgba(155, 127, 75, 1);
+            transform: scale(1.1);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 2001;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 25px;
+            border-radius: 15px 15px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .modal-content {
+            padding: 25px;
+        }
+
+        .help-section {
+            margin-bottom: 25px;
+        }
+
+        .help-section h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .help-section p {
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 8px 15px;
+            margin-top: 10px;
+        }
+
+        .shortcut-key {
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+
+        .shortcut-desc {
+            color: #6c757d;
+            align-self: center;
+        }
     </style>
 </head>
 <body>
@@ -284,6 +410,62 @@
                 <button class="zoom-btn" id="zoomIn">+</button>
                 <button class="zoom-btn" id="zoomOut">−</button>
                 <button class="zoom-btn" id="zoomReset">⌂</button>
+                <button class="help-btn" id="helpBtn">?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🔧 HVAC Floorplan Help</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div class="help-section">
+                    <h3>🏢 Navigation</h3>
+                    <p>Use the floor buttons at the top to switch between building levels. The overlay toggle shows/hides the colored HVAC zone information.</p>
+                </div>
+                
+                <div class="help-section">
+                    <h3>🔍 Zoom & Pan</h3>
+                    <p>Use the zoom controls or mouse wheel to zoom in for detail view. When zoomed in, click and drag to pan around the floor plan.</p>
+                </div>
+                
+                <div class="help-section">
+                    <h3>🔎 Search</h3>
+                    <p>Type room names, zones, or equipment in the search box to quickly jump to relevant floors with overlay enabled.</p>
+                </div>
+                
+                <div class="help-section">
+                    <h3>⌨️ Keyboard Shortcuts</h3>
+                    <div class="shortcut-grid">
+                        <span class="shortcut-key">L</span>
+                        <span class="shortcut-desc">Lower Level</span>
+                        <span class="shortcut-key">1</span>
+                        <span class="shortcut-desc">First Floor</span>
+                        <span class="shortcut-key">2</span>
+                        <span class="shortcut-desc">Second Floor</span>
+                        <span class="shortcut-key">3</span>
+                        <span class="shortcut-desc">Third Floor</span>
+                        <span class="shortcut-key">Space</span>
+                        <span class="shortcut-desc">Toggle HVAC Overlay</span>
+                        <span class="shortcut-key">=</span>
+                        <span class="shortcut-desc">Zoom In</span>
+                        <span class="shortcut-key">-</span>
+                        <span class="shortcut-desc">Zoom Out</span>
+                        <span class="shortcut-key">0</span>
+                        <span class="shortcut-desc">Reset Zoom</span>
+                    </div>
+                </div>
+                
+                <div class="help-section">
+                    <h3>💡 Tips</h3>
+                    <p><strong>Yellow zones</strong> represent office scheduling areas (consistent across floors).<br>
+                    <strong>Other colors</strong> vary by floor - refer to the overlay text for specific zone details.<br>
+                    <strong>Mobile users:</strong> Tap and drag to pan when zoomed in.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -326,6 +508,9 @@
         const floorDisplay = document.getElementById('floorDisplay');
         const overlayToggle = document.getElementById('overlayToggle');
         const searchInput = document.getElementById('searchInput');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const helpBtn = document.getElementById('helpBtn');
+        const closeModal = document.getElementById('closeModal');
 
         // Initialize the application
         function init() {
@@ -365,6 +550,13 @@
             document.getElementById('zoomOut').addEventListener('click', () => adjustZoom(-0.2));
             document.getElementById('zoomReset').addEventListener('click', resetZoom);
 
+            // Help modal
+            helpBtn.addEventListener('click', showHelp);
+            closeModal.addEventListener('click', hideHelp);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) hideHelp();
+            });
+
             // Keyboard shortcuts
             document.addEventListener('keydown', handleKeyPress);
         }
@@ -396,6 +588,7 @@
                     <button class="zoom-btn" onclick="adjustZoom(0.2)">+</button>
                     <button class="zoom-btn" onclick="adjustZoom(-0.2)">−</button>
                     <button class="zoom-btn" onclick="resetZoom()">⌂</button>
+                    <button class="help-btn" onclick="showHelp()">?</button>
                 </div>
             `;
         }
@@ -406,6 +599,17 @@
             overlayToggle.textContent = showOverlay ? 'Hide HVAC Zones' : 'Show HVAC Zones';
             overlayToggle.classList.toggle('active', showOverlay);
             showFloor(currentFloor);
+        }
+
+        // Help modal functions
+        function showHelp() {
+            modalOverlay.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideHelp() {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
 
         // Handle search functionality
@@ -466,6 +670,8 @@
                 case '=': e.preventDefault(); adjustZoom(0.2); break;
                 case '-': e.preventDefault(); adjustZoom(-0.2); break;
                 case '0': e.preventDefault(); resetZoom(); break;
+                case 'Escape': hideHelp(); break;
+                case '?': e.preventDefault(); showHelp(); break;
             }
         }
 
